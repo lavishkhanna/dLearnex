@@ -1,1 +1,92 @@
-<h1>homepage</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearneX - Personalized Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-blue-600">LearneX</a>
+            <div class="space-x-4">
+                {% if user.is_authenticated %}
+                    <span class="text-gray-700">Welcome, {{ user.username }}</span>
+                    <a href="/logout/" class="text-red-500 hover:text-red-700">Logout</a>
+                {% else %}
+                    <a href="/login/" class="text-blue-500 hover:text-blue-700">Login</a>
+                    <a href="/register/" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-center py-16">
+        <div class="container mx-auto">
+            <h1 class="text-4xl font-bold mb-4">Personalize Your Learning Journey</h1>
+            <p class="text-xl mb-8">Discover, learn, and grow with LearneX</p>
+            <a href="#courses" class="bg-white text-blue-600 px-6 py-3 rounded-full hover:bg-gray-100">
+                Start Learning
+            </a>
+        </div>
+    </header>
+
+    <!-- Courses Section -->
+    <section id="courses" class="container mx-auto py-12 px-4">
+        <h2 class="text-3xl font-bold text-center mb-10">Our Courses</h2>
+        <div class="grid md:grid-cols-4 gap-6">
+            {% for course in courses %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-4">{{ course.name }}</h3>
+                    <p class="text-gray-600 mb-6">{{ course.description }}</p>
+                    <a href="/course/{{ course.slug }}" class="block w-full text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                        Explore Course
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-gray-100 py-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-12">Why Choose LearneX?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <svg class="mx-auto h-12 w-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h3 class="mt-4 text-xl font-semibold">Personalized Learning</h3>
+                    <p class="mt-2 text-gray-600">Tailored recommendations based on your interests</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <h3 class="mt-4 text-xl font-semibold">Diverse Courses</h3>
+                    <p class="mt-2 text-gray-600">Wide range of topics and skill levels</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <svg class="mx-auto h-12 w-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h3 class="mt-4 text-xl font-semibold">Expert Content</h3>
+                    <p class="mt-2 text-gray-600">High-quality learning resources</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 LearneX. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

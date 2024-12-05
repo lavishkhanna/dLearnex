@@ -34,7 +34,8 @@ def register_user(request):
         )
         user.save()
         return JsonResponse({'message': 'User registered successfully','user_id': user.id})
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    return render(request, 'register.html')
+
 
 
 from django.contrib.auth import authenticate, login
@@ -52,7 +53,7 @@ def login_user(request):
             login(request, user)  # Save the user's session
             return JsonResponse({'message': 'Login successful','user id':user.id})
         return JsonResponse({'error': 'Invalid credentials'}, status=400)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    return render(request, 'login.html')
 
 
 @login_required
@@ -156,15 +157,15 @@ def show_pref(request):
     return JsonResponse({'message':"displaying"})
 
 from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 @csrf_exempt
 def logout_user(request):
     if request.method == 'POST':
         logout(request)  # Clear the session
         return JsonResponse({'message': 'Logout successful'})
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
+    logout(request)
+    return redirect('home')
 
 
 @login_required
@@ -174,8 +175,29 @@ def protected_view(request):
 
 
 def home_view(request):
-    return render(request, 'home.html',{})
-
+    courses = [
+        {
+            'name': 'Python',
+            'description': 'Learn Python programming from scratch',
+            'slug': 'python'
+        },
+        {
+            'name': 'Data Science',
+            'description': 'Master data analysis and machine learning',
+            'slug': 'data-science'
+        },
+        {
+            'name': 'Web Development',
+            'description': 'Build modern web applications',
+            'slug': 'web-dev'
+        },
+        {
+            'name': 'AI & Machine Learning',
+            'description': 'Explore cutting-edge AI technologies',
+            'slug': 'ai-ml'
+        }
+    ]
+    return render(request, 'home.html', {'courses': courses})
 
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -205,4 +227,51 @@ def get_recommendations(request):
 
 
 
+from django.http import HttpResponseNotFound
 
+@csrf_exempt
+def course_view(request, course_name):
+    topics = {
+        "Python": {
+            "Basics": ["Variables", "Data Types", "Operators", "Control Flow"],
+            "Functions": ["Function Definition", "Parameters", "Return Values"],
+            "Data Structures": ["Lists", "Tuples", "Dictionaries", "Sets"],
+            "Object-Oriented Programming": ["Classes", "Inheritance", "Polymorphism"],
+            "File Handling": ["Reading/Writing Files", "CSV/JSON Handling"],
+            "Modules and Libraries": ["Importing Modules", "Standard Libraries"],
+        },
+        "Data Science": {
+            "Data Manipulation": ["NumPy", "Pandas"],
+            "Data Visualization": ["Matplotlib", "Seaborn"],
+            "Machine Learning": ["Scikit-Learn", "Regression", "Classification"],
+            "Deep Learning": ["TensorFlow", "Keras"],
+            "Data Analysis": ["Exploratory Data Analysis", "Feature Engineering"],
+            "Model Evaluation": ["Cross-Validation", "Metrics"],
+        },
+        "C++": {
+            "Basics": ["Variables", "Data Types", "Operators", "Control Structures"],
+            "Functions": ["Function Definition", "Parameters", "Return Values"],
+            "Pointers and Memory Management": ["Pointers", "Dynamic Memory Allocation"],
+            "Object-Oriented Programming": ["Classes", "Inheritance", "Polymorphism"],
+            "STL (Standard Template Library)": ["Containers", "Algorithms"],
+            "File Handling": ["File Streams", "Binary Files"],
+        },
+        "UI/UX": {
+            "User Research": ["User Interviews", "Surveys", "Personas"],
+            "User Interface Design": ["Layout", "Typography", "Color Theory"],
+            "User Experience Design": ["User Flows", "Wireframing", "Prototyping"],
+            "Interaction Design": ["Microinteractions", "Transitions"],
+            "Usability Testing": ["A/B Testing", "User Feedback"],
+            "Design Tools": ["Adobe XD", "Figma", "Sketch"],
+        }
+    }
+    
+    course_topics = topics.get(course_name)
+    
+    if not course_topics:
+        return HttpResponseNotFound("Course not found")
+    
+    return render(request, 'course_details.html', {
+        'course_name': course_name,
+        'topics': course_topics
+    })

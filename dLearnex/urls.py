@@ -31,6 +31,7 @@ urlpatterns = [
     path('protected/', protected_view, name='protected'),
     path('pref/', take_prefs, name='take_prefs'),
     path('take_top/', take_top, name='take_top'),
+    path('course/<str:course_name>/', course_view, name='course_details'),
 
     # GET
     path('user/', get_user_data, name='get_user_data'),

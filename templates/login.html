@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+        
+        <div id="error-message" class="text-red-500 mb-4 text-center hidden"></div>
+        
+        <form id="login-form" class="space-y-4">
+            <div>
+                <label for="username" class="block mb-2">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    required 
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter username"
+                >
+            </div>
+            <div>
+                <label for="password" class="block mb-2">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    required 
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Enter password"
+                >
+            </div>
+            <button 
+                type="submit" 
+                class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            >
+                Login
+            </button>
+        </form>
+    </div>
+
+    <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        fetch('/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                errorMessage.textContent = data.error;
+                errorMessage.classList.remove('hidden');
+            } else {
+                // Successful login
+                window.location.href = '/';  // Redirect to home
+            }
+        })
+        .catch(error => {
+            errorMessage.textContent = 'Login failed';
+            errorMessage.classList.remove('hidden');
+        });
+    });
+    </script>
+</body>
+</html>
