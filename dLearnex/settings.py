@@ -28,6 +28,8 @@ SECRET_KEY = 'django-insecure-dy4n3k!^!nlb!52tmz&^ck)e)3@3$k&n4_&qp$^rl3ai)1y&hn
 
 # DEBUG = True
 DEBUG = False
+# DEBUG = config('DEBUG', default=False, cast=bool)
+
 
 
 # ALLOWED_HOSTS = []
@@ -99,6 +101,35 @@ DATABASES = {
         'PORT': '5432',       # Default PostgreSQL port
     }
 }
+import dj_database_url
+from decouple import config
+
+# DATABASES = {
+#     'default': dj_database_url.config(default=config('DATABASE_URL'))
+# }
+ALLOWED_HOSTS = ['*']
+
+
+
+
+import dj_database_url
+import os
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'learnex_try_1',
+        'USER': 'postgres',
+        'PASSWORD': 'Lavish',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+# # Override database settings with Heroku's DATABASE_URL if present
+# if 'DATABASE_URL' in os.environ:
+#     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
 
 
 
@@ -144,3 +175,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
